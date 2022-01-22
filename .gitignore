@@ -1,0 +1,4 @@
+/.idea/
+/venv/
+/categories/
+**__pycache__**
