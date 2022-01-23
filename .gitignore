@@ -2,3 +2,5 @@
 /venv/
 /categories/
 **__pycache__**
+/input.txt
+/output.txt
