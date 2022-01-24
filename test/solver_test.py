@@ -1,7 +1,7 @@
 import pytest
 
 from crossword.crossword_bruteforce import CrosswordBruteforce
-from crossword.unresolved_grid import LetterGrid
+from crossword.letter_grid import LetterGrid
 from crossword.word import Word
 
 
@@ -25,7 +25,7 @@ def test_solver():
         "maybe",
         "boy"
     ]
-    solver = CrosswordBruteforce({"": expected})
+    solver = CrosswordBruteforce({CrosswordBruteforce.default_name: expected})
 
     solved = solver.solve(crossword)
 
