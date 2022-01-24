@@ -22,7 +22,7 @@ solutions to this crossword can be "blue" and "gold".
 Program is tailored to Godville game words.
 It can support using default.txt file with manually placed words (this part is limited only by your imagination).
 
-On file parsing tokenization takes place. For this operation help_script.py can be used
+On file parsing tokenization takes place. For this operation reformat_default_words.py can be used
 
 After words were read, for each word in puzzle, it searches first in **default.txt** file,
 than in **search_cache.txt**

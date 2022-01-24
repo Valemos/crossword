@@ -30,10 +30,11 @@ class Crossword:
             return self._position_to_words[position]
         raise ValueError("no word for letter found")
 
+    @property
+    def grid(self):
+        if len(self._words) > 0:
+            return self._words[0].grid
+        return None
+
     def to_grid_str(self):
         grid = self._words[0].letters[0].grid
-        return '\n'.join((''.join(
-            grid.get_cell(x, y).character
-            for x in range(grid.x_size))
-            for y in range(grid.y_size))
-        ).replace(CellType.WALL.value, ' ')

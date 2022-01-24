@@ -1,6 +1,6 @@
 import pytest
 
-from crossword.unresolved_grid import LetterGrid
+from crossword.letter_grid import LetterGrid
 
 
 @pytest.fixture()

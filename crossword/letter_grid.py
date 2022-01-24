@@ -1,10 +1,11 @@
 from .crossword import Crossword
+from .extendable_grid import ExtendableGrid
 from .grid_cell import GridCell
 from .cell_type import CellType
 from .word import Word
 
 
-class LetterGrid:
+class LetterGrid(ExtendableGrid):
     """
     x axis positive left
     y axis positive down
@@ -13,8 +14,9 @@ class LetterGrid:
     row1 0,0  1,0
     row2 0,1  1,1
     """
+
     def __init__(self):
-        self._grid: list[list[GridCell]] = []
+        super().__init__()
         self._letter_cells: list[GridCell] = []
 
     @staticmethod
@@ -22,9 +24,16 @@ class LetterGrid:
         grid = LetterGrid()
         for row_i, row in enumerate(string.strip().split('\n')):
             for col_i, letter in enumerate(row.strip()):
-                grid.add_cell(GridCell(grid, letter, col_i, row_i))
+                grid.add_letter(letter, col_i, row_i)
 
         return grid
+
+    def to_string(self, wall_value='0'):
+        return '\n'.join((''.join(
+            self.get_cell(x, y).character
+            for x in range(self.x_size))
+            for y in range(self.y_size))
+        ).replace(CellType.WALL.value, wall_value)
 
     def create_crossword(self) -> Crossword:
         crossword = Crossword()
@@ -47,53 +56,14 @@ class LetterGrid:
 
         return crossword
 
-    def is_inside(self, x, y):
-        return 0 <= x < self.x_size and \
-               0 <= y < self.y_size
+    def create_empty_cell(self, x, y):
+        return GridCell.wall(self, x, y)
 
-    @property
-    def x_size(self):
-        return len(self._grid)
-
-    @property
-    def y_size(self):
-        if self.x_size > 0:
-            return len(self._grid[0])
-        else:
-            return 0
-
-    def get_cell(self, x, y):
-        if self.is_inside(x, y):
-            return self._grid[x][y]
-        else:
-            return GridCell.wall(self, x, y)
-
-    def add_cell(self, cell: GridCell):
+    def add_letter(self, letter, x, y):
         """cannot add cells before x = 0, y = 0 only builds forwards"""
-        self.extend_to_fit(cell.x, cell.y)
-        self._grid[cell.x][cell.y] = cell
+
+        cell = GridCell(self, letter, x, y)
+        self.set_cell(x, y, cell)
 
         if cell.type != CellType.WALL:
             self._letter_cells.append(cell)
-
-    def extend_to_fit(self, x, y):
-        if self.is_inside(x, y):
-            return
-
-        x_extra = max(0, x + 1 - self.x_size)
-        y_extra = max(0, y + 1 - self.y_size)
-
-        for _ in range(x_extra):
-            self._append_x_dimension()
-
-        for _ in range(y_extra):
-            self._append_y_dimension()
-
-    def _append_x_dimension(self):
-        x = self.x_size
-        self._grid.append([GridCell.wall(self, x, y) for y in range(self.y_size)])
-
-    def _append_y_dimension(self):
-        y = self.y_size
-        for x, column in enumerate(self._grid):
-            column.append(GridCell.wall(self, x, y))

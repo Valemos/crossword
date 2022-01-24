@@ -18,6 +18,12 @@ class Word:
     def __str__(self):
         return f"{self.get_pattern()} [{self.direction.name}]"
 
+    @property
+    def grid(self):
+        if len(self.letters) > 0:
+            return self.letters[0].grid
+        return None
+
     def get_pattern(self):
         return ''.join(letter.character for letter in self.letters)
 
