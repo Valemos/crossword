@@ -1,9 +1,16 @@
 
-output.txt: input.txt
-	python main.py
-
 input.txt:
-	python fetch_crossword.py
+	python fetch_crossword.py $@
+
+output.txt: input.txt
+	python solve.py $^ $@
 
 run: output.txt
-.PHONY: run
+	python send_solution.py $^
+
+clean:
+	rm input.txt output.txt
+
+rerun: clean run
+
+.PHONY: run clean rerun

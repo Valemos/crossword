@@ -1,39 +1,25 @@
+import sys
 import time
 from pathlib import Path
 
 from bs4 import BeautifulSoup
-import requests
-import json
 import parse
 
-from selenium.webdriver import Firefox as Browser
-from selenium.webdriver.firefox.options import Options
-
 from crossword.letter_grid import LetterGrid
-from data_fetch.human_random_time import long_reaction_delay
+from data_fetch.godville_browser import godville_browser
+from data_fetch.human_random import long_reaction_delay
 
 
-_output_path = Path("input.txt")
+_output_path = Path(sys.argv[1])
 _response_save_path = Path("cw_response.txt")
-_cookies_path = Path("cookies.json")
 
-
-def load_cookies(browser):
-    with _cookies_path.open("r") as fin:
-        cookies = json.load(fin)
-
-    for cookie in cookies:
-        browser.add_cookie(cookie)
+use_cached = False
+if len(sys.argv) > 2:
+    use_cached = sys.argv[2] == "--cached"
 
 
 def from_website():
-    options = Options()
-    options.binary = "/home/anton/tools/firefox/firefox"
-
-    browser = Browser(options=options)
-    browser.get("https://godville.net/news")
-    load_cookies(browser)
-    browser.refresh()
+    browser = godville_browser("news")
     source = browser.page_source
     time.sleep(long_reaction_delay())
     browser.close()
@@ -45,14 +31,13 @@ def to_file(text):
         f.write(text)
 
 
-def from_file():
-    with _response_save_path.open('r') as f:
-        return f.read()
+if not use_cached:
+    to_file(from_website())
 
 
-# to_file(from_website())
+with _response_save_path.open('r') as f:
+    parsed_html = BeautifulSoup(f.read(), "html.parser")
 
-parsed_html = BeautifulSoup(from_file(), "html.parser")
 crossword_table = parsed_html.find(id="cross_tbl").find("tbody")
 
 grid = LetterGrid()

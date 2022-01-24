@@ -5,7 +5,7 @@ from crossword.grid_cell import GridCell
 
 class ExtendableGrid:
     def __init__(self):
-        self._grid: list[list[GridCell]] = []
+        self._grid: list[list[object]] = []
 
     @property
     def x_size(self):

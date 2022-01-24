@@ -28,6 +28,9 @@ class LetterGrid(ExtendableGrid):
 
         return grid
 
+    def get_cell(self, x, y) -> GridCell:
+        return super().get_cell(x, y)
+
     def to_string(self, wall_value='0'):
         return '\n'.join((''.join(
             self.get_cell(x, y).character

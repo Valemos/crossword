@@ -2,7 +2,9 @@ from crossword.extendable_grid import ExtendableGrid
 
 
 class VacantPlaceMock:
-    pass
+    @staticmethod
+    def get_attribute(_):
+        return ""
 
 
 class InputsGrid(ExtendableGrid):
