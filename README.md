@@ -1,4 +1,4 @@
-#Crossword solver project
+# Crossword solver project
 
 This software can be used to read crosswords in following format:
 
@@ -17,7 +17,7 @@ So, this will be a valid crossword
 
 solutions to this crossword can be "blue" and "gold".
 
-##Word sources
+## Word sources
 
 Program is tailored to Godville game words.
 It can support using default.txt file with manually placed words (this part is limited only by your imagination).
